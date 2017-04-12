@@ -6,10 +6,10 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/mjbp/storm-text-field.git"
+    "url": "https://github.com/mjbp/storm-form.git"
   },
   "bugs": {
-    "url": "https://github.com/mjbp/storm-text-field/issues"
+    "url": "https://github.com/mjbp/storm-form/issues"
   },
   "main": "dist/storm-text-field.js",
   "keywords": [

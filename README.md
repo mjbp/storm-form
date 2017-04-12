@@ -31,7 +31,6 @@ HTML
 
 ```
 CSS
-```
 Example notification CSS
 
 ```

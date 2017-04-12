@@ -13,13 +13,62 @@
 ## Usage
 HTML
 ```
-
-
-
-
+<form action="//httpbin.org/post" class="js-form">
+    <div class="form__row">
+        <div class="field__container">
+            <label class="label" for="example-1">Label</label>
+            <input class="field" type="text" id="example-1" name="example-1" value="" required>
+        </div>
+    </div>
+    <div class="form__row">
+        <div class="field__container">
+            <label class="label" for="example-2">Label</label>
+            <input class="field" type="email" id="example-2" name="example-2" value="" required>
+        </div>
+    </div>
+    <button class="form__submit js-submit__btn">Submit</button>
+</form>
 
 ```
+CSS
+```
+Example notification CSS
 
+```
+@keyframes slideUp {
+    0% {
+        transform: translateY(100%)
+    }
+    100% {
+        transform: translateY(0)
+    }
+}
+.form-status {
+    position: fixed;
+    bottom:0;
+    left:0;
+    right:0;
+    padding:24px 48px;
+    text-align:center;
+    animation:slideUp 260ms ease;
+}
+.form-status--invalid {
+    background-color:#C70933;
+    color:#fff;
+}
+.form-status--error {
+    background-color:#C70933;
+    color:#fff;
+}
+.form-status--success {
+    background-color:green;
+    color:#fff;
+}
+.form-status--submit {
+    background-color:blue;
+    color:#fff;
+}
+```
 JS
 ```
 npm i -S storm-form
@@ -42,8 +91,15 @@ Load('{{path}}/storm-form.standalone.js')
 
 ## Options
 ```
-{
-}
+messages: {
+    invalid: 'Ensure the form is valid before submission', //form is invalid
+    success: 'The form has been successfuly submitted', //form submitted
+    error: 'There was an error submitting the form', //server cannot send
+    submit: 'Submitting...'//form submitted, waiting for server
+},
+notificationTarget: document.body,
+async: true,
+callback: false
 ```
 
 ## Tests

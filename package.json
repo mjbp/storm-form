@@ -11,7 +11,7 @@
   "bugs": {
     "url": "https://github.com/mjbp/storm-form/issues"
   },
-  "main": "dist/storm-text-field.js",
+  "main": "dist/storm-form.js",
   "keywords": [
     "stormid",
     "UI",

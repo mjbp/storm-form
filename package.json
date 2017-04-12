@@ -1,6 +1,6 @@
 {
   "name": "storm-form",
-  "version": "0.1.4",
+  "version": "0.1.5",
   "description": "Lightweight async submit and constraint validation form wrapper ",
   "author": "stormid",
   "license": "MIT",

@@ -2,7 +2,7 @@
 <html lang="en" class="no-js">
 <head>
     <meta charset="utf-8">
-    <title>Storm Text Field</title>
+    <title>Storm Form</title>
 	<script>document.documentElement.className = document.documentElement.className.replace(/\bno-js\b/,'');</script>
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <meta http-equiv="cleartype" content="on">
@@ -232,23 +232,32 @@
         </form>
         <hr>
         <h2>Installation</h2>
-        <pre class="language-markup"><code>$ npm i -S storm-text-field</code></pre>
+        <pre class="language-markup"><code>$ npm i -S storm-form</code></pre>
         <h2>Usage</h2>
         <h3>HTML</h3>
-        <pre><code class="language-html"><script type="prism-html-markup"><div class="form__row">
-    <div class="field__container js-text-field">
-        <label class="label" for="example-pattern">My value must be 'test'</label>
-        <input class="field" type="text" pattern="test" id="example-pattern" name="example-pattern" value="" required>
+        <pre><code class="language-html"><script type="prism-html-markup"><form action="//httpbin.org/post" class="js-form">
+    <div class="form__row">
+        <div class="field__container">
+            <label class="label" for="example-1">Label</label>
+            <input class="field" type="text" id="example-1" name="example-1" value="" required>
+        </div>
     </div>
-</div></script></code></pre>
+    <div class="form__row">
+        <div class="field__container">
+            <label class="label" for="example-2">Label</label>
+            <input class="field" type="email" id="example-2" name="example-2" value="" required>
+        </div>
+    </div>
+    <button class="form__submit js-submit__btn">Submit</button>
+</form></script></code></pre>
         <h3>JS</h3>
         <p>Either import and initialise using a named import:</p>
-        <pre><code class="language-js">import TextField from 'storm-text-field';
+        <pre><code class="language-js">import Form from 'storm-form';
             
-TextField.init('.js-text-field');</code></pre>
+Form.init('.js-form);</code></pre>
         <p>Or async using storm-load.js, add the .standalone file to your project, then intiialise using the global name:</p>
-        <pre><code class="language-js">Load('/content/js/async/storm-text-field.standalone.js').then(() => {
-    StormTextField.init('.js-text-field');
+        <pre><code class="language-js">Load('/content/js/async/storm-form.standalone.js').then(() => {
+    StormForm.init('.js-form');
 });</code></pre>
     </div>
     <script src="./js/app.js"></script>

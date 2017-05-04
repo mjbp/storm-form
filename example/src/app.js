@@ -1,4 +1,4 @@
-import Form from './libs/storm-form';
+import Form from './libs/component';
 import TextField from 'storm-text-field';
 
 const onDOMContentLoadedTasks = [() => {

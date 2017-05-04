@@ -1,5 +1,5 @@
 import should from 'should';
-import Boilerplate from '../dist/storm-component-boilerplate';
+import Boilerplate from '../dist/storm-form.standalone';
 import 'jsdom-global/register';
 
 const html = ``;

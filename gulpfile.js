@@ -74,7 +74,10 @@ gulp.task('js:es5', function() {
             template: umdTemplate
         }))
         .pipe(header(banner, {pkg : pkg}))
-  		.pipe(rename({suffix: '.standalone'}))
+  		.pipe(rename({
+            basename: pkg.name,
+            suffix: '.standalone'
+        }))
 		.pipe(gulp.dest('dist/'));
 });
 
@@ -89,23 +92,29 @@ gulp.task('js:es5-browserify', function() {
         .pipe(buffer())
         .pipe(uglify())
         .pipe(header(banner, {pkg : pkg}))
-  		.pipe(rename({suffix: '.standalone'}))
+  		.pipe(rename({
+            basename: pkg.name,
+            suffix: '.standalone'
+        }))
 		.pipe(gulp.dest('dist/'));
 });
 
 gulp.task('js:es6', function() {
-    return gulp.src('src/*.js')
+    gulp.src('src/*.js')
         .pipe(plumber({errorHandler: onError}))
         .pipe(header(banner, {pkg : pkg}))
 		.pipe(gulp.dest('dist/'));
+
+    return gulp.src('./src/libs/*.js')
+		.pipe(gulp.dest('./dist/libs/'));
 });
 
 gulp.task('js', ['js:es6', 'js:es5']);
 // gulp.task('js', ['js:es6', 'js:es5-browserify']);
 
 gulp.task('copy', function() {
-    return gulp.src('./dist/*.js')
-		.pipe(gulp.dest('./example/src/libs/'));
+    return gulp.src('./src/**/*.js')
+		.pipe(gulp.dest('./example/src/libs/component'));
 });
 
 gulp.task('example:import', function(){
@@ -135,7 +144,7 @@ gulp.task('server', ['js', 'copy', 'example'], function() {
         tunnel: false
     });
 
-      gulp.watch(['src/*'], function(){
+      gulp.watch(['src/**/*'], function(){
           runSequence('js', 'copy', 'example', reload);
       });
       gulp.watch(['example/**/*'], ['example', reload]);

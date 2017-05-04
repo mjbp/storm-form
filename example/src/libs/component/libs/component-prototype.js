@@ -1,27 +1,14 @@
 import axios from 'axios';
 
-const CONSTANTS = {
-		TRIGGER_EVENTS: ['click', 'keydown'],
-		TRIGGER_KEYCODES: [13, 32]
-	},
-	defaults = {
-		messages: {
-			invalid: 'Ensure the form is valid before submission', //form is invalid
-			success: 'The form has been successfuly submitted', //form submitted
-			error: 'There was an error submitting the form', //server cannot send
-			submit: 'Submitting...'//form submitted, waiting for server
-		},
-		notificationTarget: document.body,
-		async: true,
-		callback: false
-	},
-	isGroupedInput = input => input.getAttribute('type') === 'checkbox' || input.getAttribute('type') === 'radio';
-
-const StormForm = {
+const TRIGGER_EVENTS = [window.PointerEvent ? 'pointerdown' : 'ontouchstart' in window ? 'touchstart' : 'click', 'keydown' ],
+      TRIGGER_KEYCODES = [13, 32],
+      isGroupedInput = input => input.getAttribute('type') === 'checkbox' || input.getAttribute('type') === 'radio';
+    
+export default {
 	init(){
-		CONSTANTS.TRIGGER_EVENTS.forEach(ev => {
+		TRIGGER_EVENTS.forEach(ev => {
 			this.btn.addEventListener(ev, e => {
-				if(!!e.keyCode && !~CONSTANTS.TRIGGER_KEYCODES.indexOf(e.keyCode)) return;
+				if(!!e.keyCode && !~TRIGGER_KEYCODES.indexOf(e.keyCode)) return;
 				this.handleSubmit(e);
 			});
 		});
@@ -36,14 +23,10 @@ const StormForm = {
 		window.setTimeout(() => {
 			document.querySelector('.js-form-status') && document.querySelector('.js-form-status').parentNode.removeChild(document.querySelector('.js-form-status'));
 			this.btn.removeAttribute('disabled');
-		}, 5000);
+		}, this.settings.notificationTimeout);
 	},
 	validate(){
-		this.errors = this.fields.map(field => {
-			return this.getError(field);
-		}).filter(field => {
-			return field !== null;
-		})
+		this.errors = this.fields.map(field => this.getError(field)).filter(field => field !== null)
 	},
 	handleSubmit: function(e){
 		e.preventDefault();
@@ -96,20 +79,3 @@ const StormForm = {
 			});
 	},
 };
-
-const init = (sel, opts) => {
-	let els = [].slice.call(document.querySelectorAll(sel));
-	
-	if(!els.length) throw new Error('Form cannot be initialised, no augmentable elements found');
-
-	return els.map((el) => {
-		return Object.assign(Object.create(StormForm), {
-			form: el,
-			btn: el.querySelector('.js-submit__btn'),
-			fields: [].slice.call(el.querySelectorAll('input:not([type=submit]), textarea, select')),
-			settings: Object.assign({}, defaults, opts)
-		}).init();
-	});
-};
-
-export default { init };

@@ -11,7 +11,7 @@
   "bugs": {
     "url": "https://github.com/mjbp/storm-form/issues"
   },
-  "main": "dist/storm-form.js",
+  "main": "dist/index.js",
   "keywords": [
     "stormid",
     "UI",

@@ -7,6 +7,9 @@ var gulp = require('gulp'),
     uglify = require('gulp-uglify'),
     rename = require('gulp-rename'),
     babel = require('gulp-babel'),
+	rollup = require('gulp-rollup'),
+	rollupNodeResolve = require('rollup-plugin-node-resolve'),
+    commonjs = require('rollup-plugin-commonjs'),
     browserify = require('browserify'),
     source = require('vinyl-source-stream'),
     buffer = require('vinyl-buffer'),
@@ -81,16 +84,24 @@ gulp.task('js:es5', function() {
 		.pipe(gulp.dest('dist/'));
 });
 
-gulp.task('js:es5-browserify', function() {
-    return browserify({
-            entries: 'src/' + pkg.name + '.js',
-            debug: true
-        })
-        .transform(babelify, {presets: ['es2015']})
-        .bundle()
-        .pipe(source(pkg.name + '.js'))
-        .pipe(buffer())
-        .pipe(uglify())
+gulp.task('js:es5-rollup', function() {
+	return gulp.src('src/index.js')
+        .pipe(rollup({
+			allowRealFiles: true,
+            entry: 'src/index.js',
+			format: 'es',
+			plugins: [
+				rollupNodeResolve(),
+                commonjs()
+			]
+        }))
+        .pipe(babel({
+			presets: ['es2015']
+		}))
+        .pipe(wrap({
+            namespace: componentName(),
+            template: umdTemplate
+        }))
         .pipe(header(banner, {pkg : pkg}))
   		.pipe(rename({
             basename: pkg.name,
@@ -105,11 +116,11 @@ gulp.task('js:es6', function() {
         .pipe(header(banner, {pkg : pkg}))
 		.pipe(gulp.dest('dist/'));
 
-    return gulp.src('./src/libs/*.js')
-		.pipe(gulp.dest('./dist/libs/'));
+    return gulp.src('./src/lib/*.js')
+		.pipe(gulp.dest('./dist/lib/'));
 });
 
-gulp.task('js', ['js:es6', 'js:es5']);
+gulp.task('js', ['js:es6', 'js:es5-rollup']);
 // gulp.task('js', ['js:es6', 'js:es5-browserify']);
 
 gulp.task('copy', function() {

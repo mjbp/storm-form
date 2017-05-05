@@ -65,7 +65,10 @@
     "should": "^11.1.1",
     "storm-text-field": "^0.1.0",
     "vinyl-buffer": "^1.0.0",
-    "vinyl-source-stream": "^1.1.0"
+    "vinyl-source-stream": "^1.1.0",
+    "rollup-plugin-node-resolve": "^3.0.0",
+    "gulp-rollup": "^2.11.0",
+    "rollup-plugin-commonjs": "^8.0.2"
   },
   "dependencies": {
     "axios": "^0.16.1"

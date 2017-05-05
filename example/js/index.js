@@ -1,11 +1,11 @@
 /**
  * @name storm-form: Lightweight async submit and constraint validation form wrapper.
- * @version 0.1.5: Thu, 04 May 2017 14:51:42 GMT
+ * @version 0.2.1: Fri, 05 May 2017 11:02:47 GMT
  * @author stormid
  * @license MIT
  */
-import defaults from './libs/defaults';
-import componentPrototype from './libs/component-prototype';
+import defaults from './lib/defaults';
+import componentPrototype from './lib/component-prototype';
 
 const init = (sel, opts) => {
 	let els = [].slice.call(document.querySelectorAll(sel));

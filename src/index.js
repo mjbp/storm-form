@@ -1,5 +1,5 @@
-import defaults from './libs/defaults';
-import componentPrototype from './libs/component-prototype';
+import defaults from './lib/defaults';
+import componentPrototype from './lib/component-prototype';
 
 const init = (sel, opts) => {
 	let els = [].slice.call(document.querySelectorAll(sel));

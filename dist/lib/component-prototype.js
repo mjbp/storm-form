@@ -1,4 +1,4 @@
-import axios from 'axios';
+import axios from 'axios/dist/axios';
 
 const TRIGGER_EVENTS = [window.PointerEvent ? 'pointerdown' : 'ontouchstart' in window ? 'touchstart' : 'click', 'keydown' ],
       TRIGGER_KEYCODES = [13, 32],

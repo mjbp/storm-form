@@ -1,8 +1,11 @@
-import axios from 'axios/dist/axios';
+import 'whatwg-fetch';
 
 const TRIGGER_EVENTS = [window.PointerEvent ? 'pointerdown' : 'ontouchstart' in window ? 'touchstart' : 'click', 'keydown' ],
       TRIGGER_KEYCODES = [13, 32],
-      isGroupedInput = input => input.getAttribute('type') === 'checkbox' || input.getAttribute('type') === 'radio';
+	  isGroupedInput = input => input.getAttribute('type') === 'checkbox' || input.getAttribute('type') === 'radio',
+	  classNames = {
+		  status: '.js-form-status'
+	  };
     
 export default {
 	init(){
@@ -16,12 +19,12 @@ export default {
 		return this;
 	},
 	showNotification(type, msg){
-		document.querySelector('.js-form-status') && document.querySelector('.js-form-status').parentNode.removeChild(document.querySelector('.js-form-status'));
+		document.querySelector(classNames.status) && document.querySelector(classNames.status).parentNode.removeChild(document.querySelector(classNames.status));
 
 		this.settings.notificationTarget.insertAdjacentHTML('beforeend', `<div class="js-form-status form-status form-status--${type}">${msg || this.settings.messages[type]}</div>`);
 
 		window.setTimeout(() => {
-			document.querySelector('.js-form-status') && document.querySelector('.js-form-status').parentNode.removeChild(document.querySelector('.js-form-status'));
+			document.querySelector(classNames.status) && document.querySelector(classNames.status).parentNode.removeChild(document.querySelector(classNames.status));
 			this.btn.removeAttribute('disabled');
 		}, this.settings.notificationTimeout);
 	},
@@ -61,7 +64,13 @@ export default {
 		this.showNotification('submit');
 		this.btn.setAttribute('disabled', 'disabled');
 
-		axios.post(this.form.getAttribute('action'), this.makeJSONFromForm())
+		fetch.post(this.form.getAttribute('action'), {
+				method: 'POST',
+				headers: {
+					'Content-type': 'application/json',
+				},
+				body: this.makeJSONFromForm()
+			})
 			.then(res => {
 				window.setTimeout(() => {
 					this.btn.setAttribute('disabled', 'disabled');

@@ -1,6 +1,6 @@
 /**
  * @name storm-form: Lightweight async submit and constraint validation form wrapper.
- * @version 0.2.1: Fri, 05 May 2017 11:05:07 GMT
+ * @version 0.2.2: Wed, 08 Nov 2017 11:28:09 GMT
  * @author stormid
  * @license MIT
  */

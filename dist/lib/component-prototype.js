@@ -1,8 +1,8 @@
-import axios from 'axios/dist/axios';
+import 'whatwg-fetch';
 
-const TRIGGER_EVENTS = [window.PointerEvent ? 'pointerdown' : 'ontouchstart' in window ? 'touchstart' : 'click', 'keydown' ],
+const TRIGGER_EVENTS = ['ontouchstart' in window ? 'touchstart' : 'click', 'keydown'],
       TRIGGER_KEYCODES = [13, 32],
-      isGroupedInput = input => input.getAttribute('type') === 'checkbox' || input.getAttribute('type') === 'radio';
+	  isGroupedInput = input => input.getAttribute('type') === 'checkbox' || input.getAttribute('type') === 'radio';
     
 export default {
 	init(){
@@ -15,67 +15,48 @@ export default {
 
 		return this;
 	},
-	showNotification(type, msg){
-		document.querySelector('.js-form-status') && document.querySelector('.js-form-status').parentNode.removeChild(document.querySelector('.js-form-status'));
-
-		this.settings.notificationTarget.insertAdjacentHTML('beforeend', `<div class="js-form-status form-status form-status--${type}">${msg || this.settings.messages[type]}</div>`);
-
-		window.setTimeout(() => {
-			document.querySelector('.js-form-status') && document.querySelector('.js-form-status').parentNode.removeChild(document.querySelector('.js-form-status'));
-			this.btn.removeAttribute('disabled');
-		}, this.settings.notificationTimeout);
-	},
 	validate(){
 		this.errors = this.fields.map(field => this.getError(field)).filter(field => field !== null)
 	},
 	handleSubmit: function(e){
 		e.preventDefault();
-		this.btn.setAttribute('disabled', 'disabled');
-		if(!this.form.checkValidity()) {
-			this.showNotification('invalid');
-			return;
-		}
 		
-		if(this.settings.async){
-			this.submitJSON();
-			return;
-		}
-
-		this.form.submit();
+		if(!this.form.checkValidity()) return;
+		if(this.settings.async) this.submitJSON();
+		else this.form.submit();
 
 	},
 	makeJSONFromForm(){
-		let data = {};
-
-		this.fields.forEach(field => {
+		return this.fields.reduce((data, field) => {
 			if(!isGroupedInput(field)) data[field.name] = field.value;
 			else if (field.checked) {
 				if(data[field.name]) data[field.name].push(field.value);
 				else data[field.name] = [field.value];
 			}
-		});
-
-		return data;
+			return data;
+		}, {});
 	},
 	submitJSON(){
-		this.showNotification('submit');
 		this.btn.setAttribute('disabled', 'disabled');
 
-		axios.post(this.form.getAttribute('action'), this.makeJSONFromForm())
+		fetch(this.form.getAttribute('action'), {
+				method: 'POST',
+				credentials: 'include',
+				headers: {
+					'Content-Type': 'application/json',
+				},
+				body: JSON.stringify(this.makeJSONFromForm())
+			})
+			.then(res => res.json())
 			.then(res => {
-				window.setTimeout(() => {
-					this.btn.setAttribute('disabled', 'disabled');
-					this.showNotification('success');
-					this.form.reset();
-					(!!this.settings.callback && typeof this.settings.callback === 'function') && this.settings.callback.call(this);
-				}, 500);
+				this.btn.removeAttribute('disabled');
+				window.notify({message: this.settings.messages.success});
+				this.form.reset();
 			})
 			.catch(err => {
-				window.setTimeout(() => {
-					console.warn(err);
-					this.btn.setAttribute('disabled', 'disabled');
-					this.showNotification('error', err);
-				}, 500);
+				console.warn(err);
+				this.btn.removeAttribute('disabled');
+				window.notify({title: this.settings.messages.error});
 			});
 	},
 };
